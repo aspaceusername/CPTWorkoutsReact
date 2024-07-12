@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import './UtilizadoresList.css'; // Import the CSS file
 
 const UtilizadoresList = () => {
   const [utilizadores, setUtilizadores] = useState([]);
@@ -24,11 +25,11 @@ const UtilizadoresList = () => {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div className="loading">Loading...</div>;
   }
 
   return (
-    <div>
+    <div className="admin-page">
       <h1>Lista de Utilizadores</h1>
       <ul>
         {utilizadores.map((utilizador) => (
