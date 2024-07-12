@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "undefined/subscriptions/1c19bf37-6053-402e-947c-31e1bd789d44/resourceGroups/dweb/providers/Microsoft.Web/sites/cptstore",
+    "appService.deploySubpath": "."
+}
