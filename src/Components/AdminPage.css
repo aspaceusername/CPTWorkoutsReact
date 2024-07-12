@@ -31,14 +31,30 @@ body {
   padding: 10px;
   border-radius: 4px;
   display: flex;
-  justify-content: space-between;
+  justify-content:space-between;
   align-items: center;
+}
+
+.admin-page li button {
+  margin-left: auto; /* Push buttons to the right */
+  background-color: #ff0000; /* Red button background */
+  color: #000000; /* Black button text */
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.admin-page li button:hover {
+  background-color: #ffffff; /* White button background on hover */
+  color: #000000; /* Black button text on hover */
 }
 
 .admin-page li:hover {
   background-color: #ff0000; /* Red background on hover */
   color: #000000; /* Black text on hover */
 }
+
 
 .loading {
   text-align: center;
