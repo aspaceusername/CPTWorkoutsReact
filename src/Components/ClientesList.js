@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import './AdminPage.css'; // Ensure this path is correct based on your project structure
 
 const ClientesList = () => {
   const [clientes, setClientes] = useState([]);
@@ -12,22 +13,23 @@ const ClientesList = () => {
           throw new Error('Network response was not ok');
         }
         const data = await response.json();
-        console.log('Clientes:', data); // Exemplo: Mostrar os clientes no console
+        setClientes(data);
+        setLoading(false);
       } catch (error) {
         console.error('Error fetching clients:', error);
+        setLoading(false);
       }
     };
-  
+
     fetchClientes();
   }, []);
-  
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div className="loading">Loading...</div>;
   }
 
   return (
-    <div>
+    <div className="admin-page">
       <h1>Lista de Clientes</h1>
       <ul>
         {clientes.map((cliente) => (
