@@ -78,31 +78,6 @@ function Landing() {
     };
     return (
     <>
-        
-        <div>
-            
-            <div className="w3-top w3-text-white w3-black">
-                <div className="w3-bar  ">
-                    <a className="w3-bar-item w3-button w3-padding-large w3-hide-medium w3-hide-large w3-right" href="javascript:void(0)" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
-                    <a href="#home" className="w3-bar-item w3-button w3-padding-large">CPT</a>
-                    <a href="#about" className="w3-bar-item w3-button w3-padding-large w3-hide-small">SOBRE</a>
-                    <a href="#service" className="w3-bar-item w3-button w3-padding-large w3-hide-small">SERVIÇOS</a>
-                    <a href="#testimony" className="w3-bar-item w3-button w3-padding-large w3-hide-small">TESTEMUNHOS</a>
-                    <a href="#contact" className="w3-bar-item w3-button w3-padding-large w3-hide-small">INFORMAÇÕES</a>
-                    <Link to="/clientes" className="w3-bar-item w3-button w3-padding-large w3-hide-small">CLIENTES</Link>
-                    <Link to="/utilizadores" className="w3-bar-item w3-button w3-padding-large w3-hide-small">Utilizadores</Link>
-                </div>
-            </div>
-    
-            <div id="navDemo" className="w3-bar-block w3-black w3-hide w3-hide-large w3-hide-medium w3-top" style={{marginTop:"46px"}}>
-                <a href="#about" className="w3-bar-item w3-button w3-padding-large">SOBRE</a>
-                <a href="#service" className="w3-bar-item w3-button w3-padding-large">SERVIÇOS</a>
-                <a href="#testimony" className="w3-bar-item w3-button w3-padding-large">TESTEMUNHOS</a>
-                <a href="#contact" className="w3-bar-item w3-button w3-padding-large">INFORMAÇÕES</a>
-                <Link to="/clientes" className="w3-bar-item w3-button w3-padding-large w3-hide-small">CLIENTES</Link>
-            </div>
-        </div>
-        
         <section id="home">
             <div className="hero">
                 <div className="hero-text">
