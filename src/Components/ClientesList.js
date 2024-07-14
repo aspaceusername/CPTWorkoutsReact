@@ -55,7 +55,7 @@ const ClientesList = () => {
       }
       const data = await response.json();
       setSelectedCliente(data);
-      setFormData(data); // Populate form data with cliente details
+      setFormData(data);
     } catch (error) {
       console.error('Error fetching cliente details:', error);
       setError(error.message);
@@ -79,7 +79,7 @@ const ClientesList = () => {
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-      // Update local state after successful deletion
+      
       setClientes(prevClientes =>
         prevClientes.filter(cliente => cliente.id !== id)
       );
@@ -127,9 +127,9 @@ const ClientesList = () => {
         setClientes([...clientes, updatedCliente]);
       }
 
-      setFormData({ nome: '', dataNascimento: '', telemovel: '', userID: '' }); // Clear form data
+      setFormData({ nome: '', dataNascimento: '', telemovel: '', userID: '' });
 
-      setShowAddClienteModal(false); // Close the modal after successful submission
+      setShowAddClienteModal(false);
     } catch (error) {
       console.error(`Error ${editMode ? 'editing' : 'adding'} cliente:`, error);
       setError(error.message);
@@ -152,7 +152,7 @@ const ClientesList = () => {
 
   return (
     <div className="admin-page">
-      <h1>Lista de Clientes</h1>
+      <h1>Clientes</h1>
       {loading ? (
         <div className="loading">Loading...</div>
       ) : error ? (
@@ -163,9 +163,9 @@ const ClientesList = () => {
             {clientes.map(cliente => (
               <li key={cliente.id}>
                 {cliente.nome} - {cliente.telemovel}
-                <button onClick={() => handleDetailsClick(cliente.id)}>View Details</button>
-                <button onClick={() => handleEditClick(cliente)}>Edit</button>
-                <button onClick={() => handleRemoveClick(cliente.id)}>Remove</button>
+                <button onClick={() => handleDetailsClick(cliente.id)}>Detalhes</button>
+                <button onClick={() => handleEditClick(cliente)}>Editar</button>
+                <button onClick={() => handleRemoveClick(cliente.id)}>Apagar</button>
               </li>
             ))}
           </ul>
@@ -176,7 +176,7 @@ const ClientesList = () => {
               <p><strong>Data de Nascimento:</strong> {selectedCliente.dataNascimento}</p>
               <p><strong>Telemovel:</strong> {selectedCliente.telemovel}</p>
               <p><strong>UserID:</strong> {selectedCliente.userID}</p>
-              <button onClick={handleHideDetails}>Hide Details</button>
+              <button onClick={handleHideDetails}>Esconder Detalhes</button>
             </div>
           )}
           {editMode && (
@@ -224,14 +224,12 @@ const ClientesList = () => {
               </form>
             </div>
           )}
-          {/* Add new cliente form */}
           {!editMode && (
             <div className="add-cliente-form">
               <h2>Add New Cliente</h2>
-              <button onClick={openAddClienteModal}>Add Cliente</button>
+              <button onClick={openAddClienteModal}>Adicionar Cliente</button>
             </div>
           )}
-          {/* Modal for adding a new cliente */}
           {showAddClienteModal && (
             <AddClienteModal
               formData={formData}
@@ -248,7 +246,6 @@ const ClientesList = () => {
   );
 };
 
-// AddClienteModal component
 const AddClienteModal = ({ formData, error, handleInputChange, handleFormSubmit, closeAddClienteModal, equipas }) => {
   return (
     <div className="modal">

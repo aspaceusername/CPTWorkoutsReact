@@ -33,11 +33,10 @@ const EquipasList = () => {
         throw new Error('Network response was not ok');
       }
       const data = await response.json();
-      // Accessing clients from data.listaClientes and building a description
       const clientsDescription = data.listaClientes.map(cliente => cliente.nome).join(', ');
-      alert(`Details for Equipa: ${data.nome}\nClientes: ${clientsDescription}`);
+      alert(`Detalhes Equipa: ${data.nome}\nClientes: ${clientsDescription}`);
     } catch (error) {
-      console.error('Error fetching equipa details:', error);
+      console.error('Erro fetching equipa detalhes:', error);
       setError(error.message);
     } finally {
       setLoading(false);
@@ -47,7 +46,7 @@ const EquipasList = () => {
   const handleDeleteClick = async (id) => {
     setLoading(true);
     try {
-      if (window.confirm('Are you sure you want to delete this equipa?')) {
+      if (window.confirm('Quer apagar esta equipa?')) {
         const response = await fetch(`https://cptworkouts20240701174748.azurewebsites.net/api/Equipas/${id}`, {
           method: 'DELETE',
         });
@@ -58,7 +57,7 @@ const EquipasList = () => {
         alert('Equipa deleted successfully.');
       }
     } catch (error) {
-      console.error('Error deleting equipa:', error);
+      console.error('Erro ao apagar equipa:', error);
       setError(error.message);
     } finally {
       setLoading(false);
@@ -75,15 +74,15 @@ const EquipasList = () => {
 
   return (
     <div className="admin-page">
-      <h1>Equipas List</h1>
+      <h1>Equipas</h1>
       <ul>
         {equipas.map(equipa => (
           <li key={equipa.id}>
             <span>{equipa.nome}</span>
             {equipa.logotipo && <img src={`https://cptworkouts20240701174748.azurewebsites.net/Imagens/${equipa.logotipo}`} alt={equipa.nome} />}
             <div className="equipas-actions">
-              <button onClick={() => handleDetailsClick(equipa.id)} className="btn">Details</button>
-              <button onClick={() => handleDeleteClick(equipa.id)} className="btn">Delete</button>
+              <button onClick={() => handleDetailsClick(equipa.id)} className="btn">Detalhes</button>
+              <button onClick={() => handleDeleteClick(equipa.id)} className="btn">Apagar</button>
             </div>
           </li>
         ))}
