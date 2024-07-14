@@ -53,7 +53,7 @@ const ServicosList = () => {
       const trainersDescription = data.listaTreinadores.map(treinador => treinador.nome).join(', ');
       alert(`Details for Servico: ${data.nome}\nTreinadores: ${trainersDescription}`);
     } catch (error) {
-      console.error('Error fetching servico details:', error);
+      console.error('Error fetching servico detalhes:', error);
       setError(error.message);
     } finally {
       setLoading(false);
@@ -63,7 +63,7 @@ const ServicosList = () => {
   const handleDeleteClick = async (id) => {
     setLoading(true);
     try {
-      if (window.confirm('Are you sure you want to delete this servico?')) {
+      if (window.confirm('Quer apagar este servico?')) {
         const response = await fetch(`https://cptworkouts20240701174748.azurewebsites.net/api/Servicos/${id}`, {
           method: 'DELETE',
         });
@@ -74,7 +74,7 @@ const ServicosList = () => {
         alert('Servico deleted successfully.');
       }
     } catch (error) {
-      console.error('Error deleting servico:', error);
+      console.error('Erro ao apagar servico:', error);
       setError(error.message);
     } finally {
       setLoading(false);
@@ -121,9 +121,9 @@ const ServicosList = () => {
       setServicos(prevServicos => [...prevServicos, createdServico]);
       setNewServico({ nome: '', preco: '', listaIdsTreinadores: [] });
       setIsCreating(false);
-      alert('Servico created successfully.');
+      alert('Servico criado com sucesso.');
     } catch (error) {
-      console.error('Error creating servico:', error);
+      console.error('Erro ao criar servico:', error);
       setError(error.message);
     } finally {
       setLoading(false);
@@ -140,8 +140,8 @@ const ServicosList = () => {
 
   return (
     <div className="admin-page">
-      <h1>Servicos List</h1>
-      <button onClick={handleCreateClick} className="btn">Create New Servico</button>
+      <h1>Servicos</h1>
+      <button onClick={handleCreateClick} className="btn">Criar novo Servico</button>
       {isCreating && (
         <form onSubmit={handleCreateSubmit} className="create-form">
           <div>
@@ -183,8 +183,8 @@ const ServicosList = () => {
               ))}
             </div>
           </div>
-          <button type="submit" className="btn">Submit</button>
-          <button type="button" onClick={() => setIsCreating(false)} className="btn">Cancel</button>
+          <button type="submit" className="btn">Guardar</button>
+          <button type="button" onClick={() => setIsCreating(false)} className="btn">Cancelar</button>
         </form>
       )}
       <ul>
@@ -193,8 +193,8 @@ const ServicosList = () => {
             <span>{servico.nome}</span>
             <span>{servico.preco}</span>
             <div className="servicos-actions">
-              <button onClick={() => handleDetailsClick(servico.id)} className="btn">Details</button>
-              <button onClick={() => handleDeleteClick(servico.id)} className="btn">Delete</button>
+              <button onClick={() => handleDetailsClick(servico.id)} className="btn">Detalhes</button>
+              <button onClick={() => handleDeleteClick(servico.id)} className="btn">Apagar</button>
             </div>
           </li>
         ))}

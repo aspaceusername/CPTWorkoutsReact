@@ -1,12 +1,7 @@
-/*CSS variables section*/
 :root {
     
     color:white;
     }
-    
-    /*Extra Large screens - Extra large desktops*/
-    
-    /*General CSS and CSS reset*/
     
     html {
       scroll-behavior: smooth;
@@ -35,10 +30,10 @@
         background-color: rgba(4,7,32,0.5);
         height: 700px;
         display: flex;
-        flex-direction: column; /* Ensures items stack vertically */
+        flex-direction: column;
         justify-content: center;
         align-items: center;
-        text-align: center; /* Centers text horizontally */
+        text-align: center;
     }
     h1{
         color:white;
@@ -104,7 +99,7 @@
         
     }
     .subscribe-button {
-        background-color: #b40219; /* Adjust the color as needed */
+        background-color: #b40219; 
         color: white;
         border: none;
         padding: 10px 20px;
@@ -117,13 +112,13 @@
 
         text-transform: uppercase;
         cursor: pointer;
-        margin-top: 0px; /* Adjust margin as needed */
+        margin-top: 0px; 
         border-radius: 5px;
         transition: background-color 0.3s ease;
     }
     
     .subscribe-button:hover {
-        background-color: #e65c50; /* Adjust the hover color as needed */
+        background-color: #e65c50;
     }
     .service-box {
         margin: 20px auto;
@@ -291,8 +286,6 @@
     }
     
     
-    /*MEDIA QUERIES*/
-    /*Large screens - Desktop*/
     @media screen and (min-width: 1700px) {
         section{
             background-color: rgba(4,7,32,0.9);

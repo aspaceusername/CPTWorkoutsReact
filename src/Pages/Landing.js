@@ -15,7 +15,7 @@ function Landing() {
     });
     
     emailjs.init({
-        publicKey: 'Y_Ij37aIjOQxbcix3', // Replace with your actual public key
+        publicKey: 'Y_Ij37aIjOQxbcix3', // chave publica
         blockHeadless: true,
         blockList: {
             list: ['foo@emailjs.com', 'bar@emailjs.com'],
@@ -23,7 +23,7 @@ function Landing() {
         },
         limitRate: {
             id: 'app',
-            throttle: 10000, // Allow 1 request per 10 seconds
+            throttle: 10000, // permite 1 request a cada 10 segundos
         },
     });
 
@@ -61,8 +61,8 @@ function Landing() {
             goals: formData.goals
         };
         emailjs.send(
-            'service_8xq0vo7', // Your Service ID
-            'template_zummwpp', // Your Template ID
+            'service_8xq0vo7',
+            'template_zummwpp',
             templateParams,
             'Y_Ij37aIjOQxbcix3'
         ).then(

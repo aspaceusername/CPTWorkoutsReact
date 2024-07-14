@@ -37,7 +37,7 @@ const TreinadoresList = () => {
       const data = await response.json();
       alert(`Details for Treinador: ${data.nome}\nData de Nascimento: ${data.dataNascimento}\nTelemovel: ${data.telemovel}\nUserID: ${data.userID}`);
     } catch (error) {
-      console.error('Error fetching treinador details:', error);
+      console.error('Error fetching treinadores detalhes:', error);
       setError(error.message);
     } finally {
       setLoading(false);
@@ -47,7 +47,7 @@ const TreinadoresList = () => {
   const handleDeleteClick = async (id) => {
     setLoading(true);
     try {
-      if (window.confirm('Are you sure you want to delete this treinador?')) {
+      if (window.confirm('Quer apagar este treinador?')) {
         const response = await fetch(`https://cptworkouts20240701174748.azurewebsites.net/api/Treinadores/${id}`, {
           method: 'DELETE',
         });
@@ -55,10 +55,10 @@ const TreinadoresList = () => {
           throw new Error('Network response was not ok');
         }
         setTreinadores(prevTreinadores => prevTreinadores.filter(treinador => treinador.id !== id));
-        alert('Treinador deleted successfully.');
+        alert('Treinador Apagado Com Sucesso');
       }
     } catch (error) {
-      console.error('Error deleting treinador:', error);
+      console.error('Erro ao apagar treinador:', error);
       setError(error.message);
     } finally {
       setLoading(false);
@@ -95,9 +95,9 @@ const TreinadoresList = () => {
       setTreinadores(prevTreinadores => [...prevTreinadores, createdTreinador]);
       setNewTreinador({ nome: '', dataNascimento: '', telemovel: '', userID: '' });
       setIsCreating(false);
-      alert('Treinador created successfully.');
+      alert('Treinador criado com sucesso');
     } catch (error) {
-      console.error('Error creating treinador:', error);
+      console.error('Erro ao criar o treinador:', error);
       setError(error.message);
     } finally {
       setLoading(false);
@@ -114,8 +114,8 @@ const TreinadoresList = () => {
 
   return (
     <div className="admin-page">
-      <h1>Treinadores List</h1>
-      <button onClick={handleCreateClick} className="btn">Create New Treinador</button>
+      <h1>Treinadores</h1>
+      <button onClick={handleCreateClick} className="btn">Criar novo Treinador</button>
       {isCreating && (
         <form onSubmit={handleCreateSubmit} className="create-form">
           <div>
@@ -158,8 +158,8 @@ const TreinadoresList = () => {
               required
             />
           </div>
-          <button type="submit" className="btn">Submit</button>
-          <button type="button" onClick={() => setIsCreating(false)} className="btn">Cancel</button>
+          <button type="submit" className="btn">Guardar</button>
+          <button type="button" onClick={() => setIsCreating(false)} className="btn">Cancelar</button>
         </form>
       )}
       <ul>
@@ -169,8 +169,8 @@ const TreinadoresList = () => {
             <span>{treinador.dataNascimento}</span>
             <span>{treinador.telemovel}</span>
             <div className="treinadores-actions">
-              <button onClick={() => handleDetailsClick(treinador.id)} className="btn">Details</button>
-              <button onClick={() => handleDeleteClick(treinador.id)} className="btn">Delete</button>
+              <button onClick={() => handleDetailsClick(treinador.id)} className="btn">Detalhes</button>
+              <button onClick={() => handleDeleteClick(treinador.id)} className="btn">Apagar</button>
             </div>
           </li>
         ))}

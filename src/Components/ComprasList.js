@@ -37,7 +37,7 @@ const ComprasList = () => {
       const data = await response.json();
       alert(`Details for Compra: ${data.dataCompra}\nServicoFK: ${data.servicoFK}\nClienteFK: ${data.clienteFK}\nValorCompra: ${data.valorCompra}`);
     } catch (error) {
-      console.error('Error fetching compra details:', error);
+      console.error('Error fetching compra detalhes:', error);
       setError(error.message);
     } finally {
       setLoading(false);
@@ -47,7 +47,7 @@ const ComprasList = () => {
   const handleDeleteClick = async (id) => {
     setLoading(true);
     try {
-      if (window.confirm('Are you sure you want to delete this compra?')) {
+      if (window.confirm('Quer apagar esta compra?')) {
         const response = await fetch(`https://cptworkouts20240701174748.azurewebsites.net/api/Compras/${id}`, {
           method: 'DELETE',
         });
@@ -55,7 +55,7 @@ const ComprasList = () => {
           throw new Error('Network response was not ok');
         }
         setCompras(prevCompras => prevCompras.filter(compra => compra.clienteFK !== id));
-        alert('Compra deleted successfully.');
+        alert('Compra Apagada Com Sucesso');
       }
     } catch (error) {
       console.error('Error deleting compra:', error);
@@ -95,9 +95,9 @@ const ComprasList = () => {
       setCompras(prevCompras => [...prevCompras, createdCompra]);
       setNewCompra({ dataCompra: '', servicoFK: '', clienteFK: '', valorCompra: '' });
       setIsCreating(false);
-      alert('Compra created successfully.');
+      alert('Compra criada com sucesso.');
     } catch (error) {
-      console.error('Error creating compra:', error);
+      console.error('Error ao criar compra:', error);
       setError(error.message);
     } finally {
       setLoading(false);
@@ -114,8 +114,8 @@ const ComprasList = () => {
 
   return (
     <div className="admin-page">
-      <h1>Compras List</h1>
-      <button onClick={handleCreateClick} className="btn">Create New Compra</button>
+      <h1>Compras</h1>
+      <button onClick={handleCreateClick} className="btn">Criar nova compra</button>
       {isCreating && (
         <form onSubmit={handleCreateSubmit} className="create-form">
           <div>
@@ -158,8 +158,8 @@ const ComprasList = () => {
               required
             />
           </div>
-          <button type="submit" className="btn">Submit</button>
-          <button type="button" onClick={() => setIsCreating(false)} className="btn">Cancel</button>
+          <button type="submit" className="btn">Guardar</button>
+          <button type="button" onClick={() => setIsCreating(false)} className="btn">Cancelar</button>
         </form>
       )}
       <ul>
@@ -170,8 +170,8 @@ const ComprasList = () => {
             <span>{compra.clienteFK}</span>
             <span>{compra.valorCompra}</span>
             <div className="compras-actions">
-              <button onClick={() => handleDetailsClick(compra.clienteFK)} className="btn">Details</button>
-              <button onClick={() => handleDeleteClick(compra.clienteFK)} className="btn">Delete</button>
+              <button onClick={() => handleDetailsClick(compra.clienteFK)} className="btn">Detalhes</button>
+              <button onClick={() => handleDeleteClick(compra.clienteFK)} className="btn">Apagar</button>
             </div>
           </li>
         ))}

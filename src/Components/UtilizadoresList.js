@@ -39,7 +39,7 @@ const UtilizadoresList = () => {
       }
       const data = await response.json();
       setSelectedUtilizador(data);
-      setFormData(data); // Populate form data with user details
+      setFormData(data);
     } catch (error) {
       console.error('Error fetching utilizador details:', error);
       setError(error.message);
@@ -63,13 +63,12 @@ const UtilizadoresList = () => {
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-      // Update local state after successful deletion
       setUtilizadores(prevUtilizadores =>
         prevUtilizadores.filter(utilizador => utilizador.id !== id)
       );
       setSelectedUtilizador(null);
     } catch (error) {
-      console.error('Error removing utilizador:', error);
+      console.error('Erro removendo utilizador:', error);
       setError(error.message);
     } finally {
       setLoading(false);
@@ -97,10 +96,10 @@ const UtilizadoresList = () => {
       }
       const newUser = await response.json();
       setUtilizadores([...utilizadores, newUser]);
-      setFormData({ nome: '', dataNascimento: '', telemovel: '', userID: '' }); // Clear form data
-      setShowAddUserModal(false); // Close the modal after successful submission
+      setFormData({ nome: '', dataNascimento: '', telemovel: '', userID: '' });
+      setShowAddUserModal(false);
     } catch (error) {
-      console.error('Error adding utilizador:', error);
+      console.error('Erro adicionando utilizador:', error);
       setError(error.message);
     } finally {
       setLoading(false);
@@ -121,7 +120,7 @@ const UtilizadoresList = () => {
 
   return (
     <div className="admin-page">
-      <h1>Lista de Utilizadores</h1>
+      <h1>Utilizadores</h1>
       {loading ? (
         <div className="loading">Loading...</div>
       ) : error ? (
@@ -132,9 +131,9 @@ const UtilizadoresList = () => {
             {utilizadores.map(utilizador => (
               <li key={utilizador.id}>
                 {utilizador.nome} - {utilizador.telemovel}
-                <button onClick={() => handleDetailsClick(utilizador.id)}>View Details</button>
-                <button onClick={() => handleEditClick(utilizador)}>Edit</button>
-                <button onClick={() => handleRemoveClick(utilizador.id)}>Remove</button>
+                <button onClick={() => handleDetailsClick(utilizador.id)}>Detalhes</button>
+                <button onClick={() => handleEditClick(utilizador)}>Editar</button>
+                <button onClick={() => handleRemoveClick(utilizador.id)}>Apagar</button>
               </li>
             ))}
           </ul>
@@ -145,12 +144,12 @@ const UtilizadoresList = () => {
               <p><strong>Data de Nascimento:</strong> {selectedUtilizador.dataNascimento}</p>
               <p><strong>Telemovel:</strong> {selectedUtilizador.telemovel}</p>
               <p><strong>UserID:</strong> {selectedUtilizador.userID}</p>
-              <button onClick={handleHideDetails}>Hide Details</button>
+              <button onClick={handleHideDetails}>Esconder Detalhes</button>
             </div>
           )}
           {editMode && (
             <div className="edit-form">
-              <h2>Edit Utilizador</h2>
+              <h2>Editar Utilizador</h2>
               <form onSubmit={handleFormSubmit}>
                 <label>
                   Nome:
@@ -188,19 +187,17 @@ const UtilizadoresList = () => {
                     onChange={handleInputChange}
                   />
                 </label>
-                <button type="submit">Save</button>
-                <button onClick={() => setEditMode(false)}>Cancel</button>
+                <button type="submit">Guardar</button>
+                <button onClick={() => setEditMode(false)}>Cancelar</button>
               </form>
             </div>
           )}
-          {/* Add new user form */}
           {!editMode && (
             <div className="add-user-form">
-              <h2>Add New Utilizador</h2>
-              <button onClick={openAddUserModal}>Add User</button>
+              <h2>Adicionar Utilizador</h2>
+              <button onClick={openAddUserModal}>Adicionar Utilizador</button>
             </div>
           )}
-          {/* Modal for adding a new user */}
           {showAddUserModal && (
             <AddUserModal
               formData={formData}
@@ -216,13 +213,12 @@ const UtilizadoresList = () => {
   );
 };
 
-// AddUserModal component
 const AddUserModal = ({ formData, error, handleInputChange, handleFormSubmit, closeAddUserModal }) => {
   return (
     <div className="modal">
       <div className="modal-content">
         <span className="close" onClick={closeAddUserModal}>&times;</span>
-        <h2>Add New Utilizador</h2>
+        <h2>Adicionar Utilizador</h2>
         <form onSubmit={handleFormSubmit}>
           <label>
             Nome:
@@ -260,7 +256,7 @@ const AddUserModal = ({ formData, error, handleInputChange, handleFormSubmit, cl
               onChange={handleInputChange}
             />
           </label>
-          <button type="submit">Add User</button>
+          <button type="submit">Adicionar Utilizador</button>
           {error && <p className="error">{error}</p>}
         </form>
       </div>
