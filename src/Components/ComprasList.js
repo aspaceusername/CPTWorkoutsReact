@@ -7,6 +7,9 @@ const ComprasList = () => {
   const [error, setError] = useState(null);
   const [isCreating, setIsCreating] = useState(false);
   const [newCompra, setNewCompra] = useState({ dataCompra: '', servicoFK: '', clienteFK: '', valorCompra: '' });
+  const [editMode, setEditMode] = useState(false);
+  const [selectedCompra, setSelectedCompra] = useState(null);
+  const [formData, setFormData] = useState({ dataCompra: '', servicoFK: '', clienteFK: '', valorCompra: '' });
 
   useEffect(() => {
     const fetchCompras = async () => {
@@ -37,7 +40,7 @@ const ComprasList = () => {
       const data = await response.json();
       alert(`Details for Compra: ${data.dataCompra}\nServicoFK: ${data.servicoFK}\nClienteFK: ${data.clienteFK}\nValorCompra: ${data.valorCompra}`);
     } catch (error) {
-      console.error('Error fetching compra detalhes:', error);
+      console.error('Error fetching compra details:', error);
       setError(error.message);
     } finally {
       setLoading(false);
@@ -102,6 +105,46 @@ const ComprasList = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleEditClick = (compra) => {
+    setEditMode(true);
+    setSelectedCompra(compra);
+    setFormData({ dataCompra: compra.dataCompra, servicoFK: compra.servicoFK, clienteFK: compra.clienteFK, valorCompra: compra.valorCompra });
+  };
+
+  const handleEditSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const response = await fetch(`https://cptworkouts20240701174748.azurewebsites.net/api/Compras/${selectedCompra.clienteFK}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const updatedCompra = await response.json();
+      setCompras(prevCompras => prevCompras.map(compra => (compra.clienteFK === updatedCompra.clienteFK ? updatedCompra : compra)));
+      setEditMode(false);
+      alert('Compra atualizada com sucesso.');
+    } catch (error) {
+      console.error('Error ao atualizar compra:', error);
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prevFormData => ({
+      ...prevFormData,
+      [name]: value,
+    }));
   };
 
   if (loading) {
@@ -171,11 +214,57 @@ const ComprasList = () => {
             <span>{compra.valorCompra}</span>
             <div className="compras-actions">
               <button onClick={() => handleDetailsClick(compra.clienteFK)} className="btn">Detalhes</button>
+              <button onClick={() => handleEditClick(compra)} className="btn">Editar</button>
               <button onClick={() => handleDeleteClick(compra.clienteFK)} className="btn">Apagar</button>
             </div>
           </li>
         ))}
       </ul>
+
+      {editMode && (
+        <div className="modal">
+          <div className="modal-content">
+            <span className="close" onClick={() => setEditMode(false)}>&times;</span>
+            <h2>Editar Compra</h2>
+            <form onSubmit={handleEditSubmit}>
+              <label htmlFor="dataCompra">Data Compra:</label>
+              <input
+                type="date"
+                id="dataCompra"
+                name="dataCompra"
+                value={formData.dataCompra}
+                onChange={handleInputChange}
+              />
+              <label htmlFor="servicoFK">ServicoFK:</label>
+              <input
+                type="text"
+                id="servicoFK"
+                name="servicoFK"
+                value={formData.servicoFK}
+                onChange={handleInputChange}
+              />
+              <label htmlFor="clienteFK">ClienteFK:</label>
+              <input
+                type="text"
+                id="clienteFK"
+                name="clienteFK"
+                value={formData.clienteFK}
+                onChange={handleInputChange}
+              />
+              <label htmlFor="valorCompra">Valor Compra:</label>
+              <input
+                type="number"
+                id="valorCompra"
+                name="valorCompra"
+                value={formData.valorCompra}
+                onChange={handleInputChange}
+              />
+              <button type="submit">Guardar</button>
+              <button type="button" onClick={() => setEditMode(false)}>Cancelar</button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

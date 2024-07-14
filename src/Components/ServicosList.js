@@ -8,6 +8,9 @@ const ServicosList = () => {
   const [error, setError] = useState(null);
   const [isCreating, setIsCreating] = useState(false);
   const [newServico, setNewServico] = useState({ nome: '', preco: '', listaIdsTreinadores: [] });
+  const [editMode, setEditMode] = useState(false);
+  const [selectedServico, setSelectedServico] = useState(null);
+  const [formData, setFormData] = useState({ nome: '', preco: '', listaIdsTreinadores: [] });
 
   useEffect(() => {
     const fetchServicos = async () => {
@@ -130,6 +133,46 @@ const ServicosList = () => {
     }
   };
 
+  const handleEditClick = (servico) => {
+    setEditMode(true);
+    setSelectedServico(servico);
+    setFormData({ nome: servico.nome, preco: servico.preco, listaIdsTreinadores: servico.listaTreinadores.map(treinador => treinador.id) });
+  };
+
+  const handleEditSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const response = await fetch(`https://cptworkouts20240701174748.azurewebsites.net/api/Servicos/${selectedServico.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const updatedServico = await response.json();
+      setServicos(prevServicos => prevServicos.map(servico => (servico.id === updatedServico.id ? updatedServico : servico)));
+      setEditMode(false);
+      alert('Servico atualizado com sucesso.');
+    } catch (error) {
+      console.error('Erro ao atualizar servico:', error);
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prevFormData => ({
+      ...prevFormData,
+      [name]: value,
+    }));
+  };
+
   if (loading) {
     return <div className="loading">Loading...</div>;
   }
@@ -194,11 +237,58 @@ const ServicosList = () => {
             <span>{servico.preco}</span>
             <div className="servicos-actions">
               <button onClick={() => handleDetailsClick(servico.id)} className="btn">Detalhes</button>
+              <button onClick={() => handleEditClick(servico)} className="btn">Editar</button>
               <button onClick={() => handleDeleteClick(servico.id)} className="btn">Apagar</button>
             </div>
           </li>
         ))}
       </ul>
+
+      {editMode && (
+        <div className="modal">
+          <div className="modal-content">
+            <span className="close" onClick={() => setEditMode(false)}>&times;</span>
+            <h2>Editar Servico</h2>
+            <form onSubmit={handleEditSubmit}>
+              <label htmlFor="nome">Nome:</label>
+              <input
+                type="text"
+                id="nome"
+                name="nome"
+                value={formData.nome}
+                onChange={handleInputChange}
+              />
+              <label htmlFor="preco">Preco:</label>
+              <input
+                type="number"
+                id="preco"
+                name="preco"
+                value={formData.preco}
+                onChange={handleInputChange}
+              />
+              <label>Treinadores:</label>
+              <div className="treinadores-checkboxes">
+                {treinadores.map(treinador => (
+                  <div key={treinador.id}>
+                    <label>
+                      <input
+                        type="checkbox"
+                        name="listaIdsTreinadores"
+                        value={treinador.id}
+                        checked={formData.listaIdsTreinadores.includes(treinador.id)}
+                        onChange={handleInputChange}
+                      />
+                      {treinador.nome}
+                    </label>
+                  </div>
+                ))}
+              </div>
+              <button type="submit">Guardar</button>
+              <button type="button" onClick={() => setEditMode(false)}>Cancelar</button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

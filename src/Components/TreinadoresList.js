@@ -7,6 +7,9 @@ const TreinadoresList = () => {
   const [error, setError] = useState(null);
   const [isCreating, setIsCreating] = useState(false);
   const [newTreinador, setNewTreinador] = useState({ nome: '', dataNascimento: '', telemovel: '', userID: '' });
+  const [editMode, setEditMode] = useState(false);
+  const [selectedTreinador, setSelectedTreinador] = useState(null);
+  const [formData, setFormData] = useState({ nome: '', dataNascimento: '', telemovel: '', userID: '' });
 
   useEffect(() => {
     const fetchTreinadores = async () => {
@@ -104,6 +107,46 @@ const TreinadoresList = () => {
     }
   };
 
+  const handleEditClick = (treinador) => {
+    setEditMode(true);
+    setSelectedTreinador(treinador);
+    setFormData({ nome: treinador.nome, dataNascimento: treinador.dataNascimento, telemovel: treinador.telemovel, userID: treinador.userID });
+  };
+
+  const handleEditSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const response = await fetch(`https://cptworkouts20240701174748.azurewebsites.net/api/Treinadores/${selectedTreinador.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const updatedTreinador = await response.json();
+      setTreinadores(prevTreinadores => prevTreinadores.map(treinador => (treinador.id === updatedTreinador.id ? updatedTreinador : treinador)));
+      setEditMode(false);
+      alert('Treinador atualizado com sucesso');
+    } catch (error) {
+      console.error('Erro ao atualizar treinador:', error);
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prevFormData => ({
+      ...prevFormData,
+      [name]: value,
+    }));
+  };
+
   if (loading) {
     return <div className="loading">Loading...</div>;
   }
@@ -170,11 +213,57 @@ const TreinadoresList = () => {
             <span>{treinador.telemovel}</span>
             <div className="treinadores-actions">
               <button onClick={() => handleDetailsClick(treinador.id)} className="btn">Detalhes</button>
+              <button onClick={() => handleEditClick(treinador)} className="btn">Editar</button>
               <button onClick={() => handleDeleteClick(treinador.id)} className="btn">Apagar</button>
             </div>
           </li>
         ))}
       </ul>
+
+      {editMode && (
+        <div className="modal">
+          <div className="modal-content">
+            <span className="close" onClick={() => setEditMode(false)}>&times;</span>
+            <h2>Editar Treinador</h2>
+            <form onSubmit={handleEditSubmit}>
+              <label htmlFor="nome">Nome:</label>
+              <input
+                type="text"
+                id="nome"
+                name="nome"
+                value={formData.nome}
+                onChange={handleInputChange}
+              />
+              <label htmlFor="dataNascimento">Data de Nascimento:</label>
+              <input
+                type="date"
+                id="dataNascimento"
+                name="dataNascimento"
+                value={formData.dataNascimento}
+                onChange={handleInputChange}
+              />
+              <label htmlFor="telemovel">Telemovel:</label>
+              <input
+                type="text"
+                id="telemovel"
+                name="telemovel"
+                value={formData.telemovel}
+                onChange={handleInputChange}
+              />
+              <label htmlFor="userID">UserID:</label>
+              <input
+                type="text"
+                id="userID"
+                name="userID"
+                value={formData.userID}
+                onChange={handleInputChange}
+              />
+              <button type="submit">Guardar</button>
+              <button type="button" onClick={() => setEditMode(false)}>Cancelar</button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

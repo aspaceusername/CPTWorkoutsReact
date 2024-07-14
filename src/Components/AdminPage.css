@@ -29,8 +29,16 @@ body {
   padding: 10px;
   border-radius: 4px;
   display: flex;
-  justify-content:space-between;
+  justify-content: space-between;
   align-items: center;
+}
+
+.admin-page li img {
+  max-width: 100px; /* Set a max width for the image */
+  max-height: 100px; /* Set a max height for the image */
+  object-fit: cover; /* Ensure the image fits within the defined dimensions */
+  border-radius: 4px;
+  margin-left: 10px;
 }
 
 .admin-page li button {
@@ -52,7 +60,6 @@ body {
   background-color: #ff0000;
   color: #000000;
 }
-
 
 .loading {
   text-align: center;
