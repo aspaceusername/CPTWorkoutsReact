@@ -1,15 +1,14 @@
-// ConfirmationPage.js
-
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 const ConfirmationPage = () => {
     const { userId, code } = useParams();
+    const [confirmationMessage, setConfirmationMessage] = useState('Confirming email...');
 
     useEffect(() => {
         const confirmEmail = async () => {
             try {
-                const response = await fetch(`https://cptworkouts20240701174748.azurewebsites.net/api/account/confirm-email`, {
+                const response = await fetch('https://cptworkouts20240701174748.azurewebsites.net/api/account/confirmemail', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -18,24 +17,30 @@ const ConfirmationPage = () => {
                 });
 
                 if (response.ok) {
-                    console.log('Email confirmed successfully');
+                    setConfirmationMessage('Email confirmed successfully! Redirecting to login...');
                 } else {
-                    throw new Error('Error confirming email');
+                    setConfirmationMessage('Email confirmation failed. Please try again.');
                 }
             } catch (error) {
-                console.error('Error confirming email:', error);
+                setConfirmationMessage('An error occurred. Please try again.');
             }
         };
 
-        if (userId && code) {
-            confirmEmail();
-        }
+        confirmEmail();
     }, [userId, code]);
+
+    useEffect(() => {
+        const redirectTimer = setTimeout(() => {
+            window.location.href = '/login'; // Redirect to login after confirmation
+        }, 3000); // Redirect after 3 seconds
+
+        return () => clearTimeout(redirectTimer);
+    }, []);
 
     return (
         <div>
-            <h1>Email Confirmation</h1>
-            <p>Confirming your email...</p>
+            <h2>Email Confirmation</h2>
+            <p>{confirmationMessage}</p>
         </div>
     );
 };

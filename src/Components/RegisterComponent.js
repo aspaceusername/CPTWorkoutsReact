@@ -38,7 +38,9 @@ const Register = () => {
                 telemovel: clienteTelemovel
             } : null
         };
-
+        
+        console.log('Register Data:', JSON.stringify(registerData, null, 2));
+        
         try {
             const response = await fetch('https://cptworkouts20240701174748.azurewebsites.net/api/account/register', {
                 method: 'POST',
@@ -47,20 +49,17 @@ const Register = () => {
                 },
                 body: JSON.stringify(registerData)
             });
-
-            if (response.ok) {
-                const result = await response.json();
-                console.log('Registration successful:', result);
-                navigate(`/confirm-email/${result.userId}/${result.code}`);
-            } else {
+        
+            if (!response.ok) {
                 const errorData = await response.json();
-                console.error('Registration failed:', errorData);
-                setError('Registration failed. Please try again.');
+                throw new Error(`HTTP error! status: ${response.status}, details: ${JSON.stringify(errorData)}`);
             }
+        
+            const data = await response.json();
+            console.log('Registration successful', data);
         } catch (error) {
             console.error('Error during registration:', error);
-            setError('Error during registration. Please try again.');
-        }
+        }              
     };
 
     return (

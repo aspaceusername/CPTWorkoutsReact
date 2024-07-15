@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './AdminPage.css';
 
+const API_BASE_URL = 'https://cptworkouts20240701174748.azurewebsites.net/api/Equipas';
+
 const EquipasList = () => {
   const [equipas, setEquipas] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -8,11 +10,13 @@ const EquipasList = () => {
   const [editMode, setEditMode] = useState(false);
   const [selectedEquipa, setSelectedEquipa] = useState(null);
   const [formData, setFormData] = useState({ nome: '', logotipo: '' });
+  const [file, setFile] = useState(null);
+  const [showAddModal, setShowAddModal] = useState(false);
 
   useEffect(() => {
     const fetchEquipas = async () => {
       try {
-        const response = await fetch('https://cptworkouts20240701174748.azurewebsites.net/api/Equipas');
+        const response = await fetch(API_BASE_URL);
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
@@ -31,7 +35,7 @@ const EquipasList = () => {
   const handleDetailsClick = async (id) => {
     setLoading(true);
     try {
-      const response = await fetch(`https://cptworkouts20240701174748.azurewebsites.net/api/Equipas/${id}`);
+      const response = await fetch(`${API_BASE_URL}/${id}`);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -50,7 +54,7 @@ const EquipasList = () => {
     setLoading(true);
     try {
       if (window.confirm('Quer apagar esta equipa?')) {
-        const response = await fetch(`https://cptworkouts20240701174748.azurewebsites.net/api/Equipas/${id}`, {
+        const response = await fetch(`${API_BASE_URL}/${id}`, {
           method: 'DELETE',
         });
         if (!response.ok) {
@@ -77,7 +81,7 @@ const EquipasList = () => {
     event.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch(`https://cptworkouts20240701174748.azurewebsites.net/api/Equipas/${selectedEquipa.id}`, {
+      const response = await fetch(`${API_BASE_URL}/${selectedEquipa.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -99,12 +103,56 @@ const EquipasList = () => {
     }
   };
 
+  const handleAddSubmit = async (event) => {
+    event.preventDefault();
+    setLoading(true);
+
+    const newFormData = new FormData();
+    newFormData.append('nome', formData.nome);
+    newFormData.append('ImagemLogo', file);
+
+    try {
+      const response = await fetch(API_BASE_URL, {
+        method: 'POST',
+        body: newFormData,
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const newEquipa = await response.json();
+      setEquipas([...equipas, newEquipa]);
+      setFormData({ nome: '', logotipo: '' });
+      setFile(null);
+      setShowAddModal(false);
+      alert('Equipa added successfully.');
+    } catch (error) {
+      console.error('Error adding equipa:', error);
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setFormData(prevFormData => ({
       ...prevFormData,
       [name]: value,
     }));
+  };
+
+  const handleFileChange = (event) => {
+    setFile(event.target.files[0]);
+  };
+
+  const handleOpenAddModal = () => {
+    setShowAddModal(true);
+  };
+
+  const handleCloseAddModal = () => {
+    setShowAddModal(false);
   };
 
   if (loading) {
@@ -118,6 +166,7 @@ const EquipasList = () => {
   return (
     <div className="admin-page">
       <h1>Equipas</h1>
+      <button onClick={handleOpenAddModal} className="btn">Adicionar Equipa</button>
       <ul>
         {equipas.map(equipa => (
           <li key={equipa.id}>
@@ -161,6 +210,34 @@ const EquipasList = () => {
               />
               <button type="submit">Save</button>
               <button type="button" onClick={() => setEditMode(false)}>Cancel</button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {showAddModal && (
+        <div className="modal">
+          <div className="modal-content">
+            <span className="close" onClick={handleCloseAddModal}>&times;</span>
+            <h2>Adicionar Equipa</h2>
+            <form onSubmit={handleAddSubmit}>
+              <label htmlFor="nome">Nome:</label>
+              <input
+                type="text"
+                id="nome"
+                name="nome"
+                value={formData.nome}
+                onChange={handleInputChange}
+              />
+              <label htmlFor="imagemLogo">Logotipo:</label>
+              <input
+                type="file"
+                id="imagemLogo"
+                name="imagemLogo"
+                onChange={handleFileChange}
+              />
+              <button type="submit">Adicionar</button>
+              <button type="button" onClick={handleCloseAddModal}>Cancel</button>
             </form>
           </div>
         </div>
