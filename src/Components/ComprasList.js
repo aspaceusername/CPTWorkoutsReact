@@ -6,10 +6,10 @@ const ComprasList = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isCreating, setIsCreating] = useState(false);
-  const [newCompra, setNewCompra] = useState({ dataCompra: '', servicoFK: '', clienteFK: '', valorCompra: '' });
+  const [newCompra, setNewCompra] = useState({ dataCompra: '', horaCompra: '', servicoFK: '', clienteFK: '', valorCompra: '' });
   const [editMode, setEditMode] = useState(false);
   const [selectedCompra, setSelectedCompra] = useState(null);
-  const [formData, setFormData] = useState({ dataCompra: '', servicoFK: '', clienteFK: '', valorCompra: '' });
+  const [formData, setFormData] = useState({ dataCompra: '', horaCompra: '', servicoFK: '', clienteFK: '', valorCompra: '' });
 
   useEffect(() => {
     const fetchCompras = async () => {
@@ -38,7 +38,7 @@ const ComprasList = () => {
         throw new Error('Network response was not ok');
       }
       const data = await response.json();
-      alert(`Detalhes da Compra: ${data.dataCompra}\nServicoFK: ${data.servicoFK}\nClienteFK: ${data.clienteFK}\nValorCompra: ${data.valorCompra}`);
+      alert(`Detalhes da Compra: ${data.dataCompra} ${data.horaCompra}\nServicoFK: ${data.servicoFK}\nClienteFK: ${data.clienteFK}\nValorCompra: ${data.valorCompra}`);
     } catch (error) {
       console.error('Erro ao buscar detalhes da compra', error);
       setError(error.message);
@@ -96,7 +96,7 @@ const ComprasList = () => {
       }
       const createdCompra = await response.json();
       setCompras(prevCompras => [...prevCompras, createdCompra]);
-      setNewCompra({ dataCompra: '', servicoFK: '', clienteFK: '', valorCompra: '' });
+      setNewCompra({ dataCompra: '', horaCompra: '', servicoFK: '', clienteFK: '', valorCompra: '' });
       setIsCreating(false);
       alert('Compra criada com sucesso.');
     } catch (error) {
@@ -110,7 +110,7 @@ const ComprasList = () => {
   const handleEditClick = (compra) => {
     setEditMode(true);
     setSelectedCompra(compra);
-    setFormData({ dataCompra: compra.dataCompra, servicoFK: compra.servicoFK, clienteFK: compra.clienteFK, valorCompra: compra.valorCompra });
+    setFormData({ dataCompra: compra.dataCompra, horaCompra: compra.horaCompra, servicoFK: compra.servicoFK, clienteFK: compra.clienteFK, valorCompra: compra.valorCompra });
   };
 
   const handleEditSubmit = async (e) => {
@@ -164,7 +164,7 @@ const ComprasList = () => {
           <div>
             <label>Data Compra</label>
             <input
-              type="date"
+              type="datetime-local" // Change to datetime-local to include both date and time
               name="dataCompra"
               value={newCompra.dataCompra}
               onChange={handleCreateChange}
@@ -208,7 +208,7 @@ const ComprasList = () => {
       <ul>
         {compras.map(compra => (
           <li key={compra.clienteFK}>
-            <span>{compra.dataCompra}</span>
+            <span>{compra.dataCompra} {compra.horaCompra}</span>
             <span>{compra.servicoFK}</span>
             <span>{compra.clienteFK}</span>
             <span>{compra.valorCompra}</span>
@@ -229,7 +229,7 @@ const ComprasList = () => {
             <form onSubmit={handleEditSubmit}>
               <label htmlFor="dataCompra">Data Compra:</label>
               <input
-                type="date"
+                type="datetime-local"
                 id="dataCompra"
                 name="dataCompra"
                 value={formData.dataCompra}
@@ -259,8 +259,8 @@ const ComprasList = () => {
                 value={formData.valorCompra}
                 onChange={handleInputChange}
               />
-              <button type="submit">Guardar</button>
-              <button type="button" onClick={() => setEditMode(false)}>Cancelar</button>
+              <button type="submit" className="btn">Guardar</button>
+              <button type="button" onClick={() => setEditMode(false)} className="btn">Cancelar</button>
             </form>
           </div>
         </div>

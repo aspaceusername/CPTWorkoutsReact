@@ -6,7 +6,7 @@ const ClientesList = () => {
   const [loading, setLoading] = useState(true);
   const [selectedCliente, setSelectedCliente] = useState(null);
   const [editMode, setEditMode] = useState(false);
-  const [formData, setFormData] = useState({ nome: '', dataNascimento: '', telemovel: '', userID: '' });
+  const [formData, setFormData] = useState({ nome: '', dataNascimento: '', telemovel: '', userID: '', equipaFK: '' });
   const [error, setError] = useState(null);
   const [showAddClienteModal, setShowAddClienteModal] = useState(false);
   const [equipas, setEquipas] = useState([]);
@@ -79,7 +79,7 @@ const ClientesList = () => {
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-      
+
       setClientes(prevClientes =>
         prevClientes.filter(cliente => cliente.id !== id)
       );
@@ -119,7 +119,16 @@ const ClientesList = () => {
         throw new Error('Network response was not ok');
       }
 
-      const updatedCliente = await response.json();
+      let updatedCliente;
+      if (method === 'PUT') {
+        if (response.status === 204) {
+          updatedCliente = formData; // No content but successful
+        } else {
+          updatedCliente = await response.json();
+        }
+      } else {
+        updatedCliente = await response.json();
+      }
 
       if (editMode) {
         setClientes(clientes.map(cliente => cliente.id === updatedCliente.id ? updatedCliente : cliente));
@@ -127,7 +136,7 @@ const ClientesList = () => {
         setClientes([...clientes, updatedCliente]);
       }
 
-      setFormData({ nome: '', dataNascimento: '', telemovel: '', userID: '' });
+      setFormData({ nome: '', dataNascimento: '', telemovel: '', userID: '', equipaFK: '' });
 
       setShowAddClienteModal(false);
     } catch (error) {
@@ -181,7 +190,7 @@ const ClientesList = () => {
           )}
           {editMode && (
             <div className="edit-form">
-              <h2>{editMode ? 'Edit' : 'Add'} Cliente</h2>
+              <h2>Edit Cliente</h2>
               <form onSubmit={handleFormSubmit}>
                 <label>
                   Nome:
@@ -219,7 +228,19 @@ const ClientesList = () => {
                     onChange={handleInputChange}
                   />
                 </label>
-                <button type="submit">{editMode ? 'Save' : 'Add'}</button>
+                <label>
+                  Equipa:
+                  <select
+                    name="equipaFK"
+                    value={formData.equipaFK}
+                    onChange={handleInputChange}
+                  >
+                    {equipas.map(equipa => (
+                      <option key={equipa.id} value={equipa.id}>{equipa.nome}</option>
+                    ))}
+                  </select>
+                </label>
+                <button type="submit">Save</button>
                 <button onClick={() => setEditMode(false)}>Cancelar</button>
               </form>
             </div>
