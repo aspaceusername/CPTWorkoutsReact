@@ -141,25 +141,38 @@ const ServicosList = () => {
   const handleEditClick = (servico) => {
     setEditMode(true);
     setSelectedServico(servico);
-    setFormData({ nome: servico.nome, preco: servico.preco, listaIdsTreinadores: servico.listaTreinadores.map(treinador => treinador.id) });
+    setFormData({
+      nome: servico.nome,
+      preco: servico.preco,
+      listaIdsTreinadores: servico.listaTreinadores.map(treinador => treinador.id),
+    });
   };
+  
 
   const handleEditSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
+      const updatedServico = {
+        nome: formData.nome,
+        preco: formData.preco,
+        listaIdsTreinadores: formData.listaIdsTreinadores,
+      };
+  
       const response = await fetch(`https://cptworkouts20240701174748.azurewebsites.net/api/Servicos/${selectedServico.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(updatedServico),
       });
+  
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-      const updatedServico = await response.json();
-      setServicos(prevServicos => prevServicos.map(servico => (servico.id === updatedServico.id ? updatedServico : servico)));
+  
+      const updatedServicoResponse = await response.json();
+      setServicos(prevServicos => prevServicos.map(servico => (servico.id === updatedServicoResponse.id ? updatedServicoResponse : servico)));
       setEditMode(false);
       alert('Servico atualizado com sucesso.');
     } catch (error) {
@@ -169,6 +182,7 @@ const ServicosList = () => {
       setLoading(false);
     }
   };
+  
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;

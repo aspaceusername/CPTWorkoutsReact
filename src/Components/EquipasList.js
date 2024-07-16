@@ -80,20 +80,29 @@ const EquipasList = () => {
   const handleEditSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
+
     try {
+      const updatedFormData = new FormData();
+      updatedFormData.append('nome', formData.nome);
+      if (file) {
+        updatedFormData.append('ImagemLogo', file);
+      } else {
+        updatedFormData.append('logotipo', formData.logotipo); // Add current logotipo if no new file is provided
+      }
+
       const response = await fetch(`${API_BASE_URL}/${selectedEquipa.id}`, {
         method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
+        body: updatedFormData,
       });
+
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
+
       const updatedEquipa = await response.json();
       setEquipas(prevEquipas => prevEquipas.map(equipa => (equipa.id === updatedEquipa.id ? updatedEquipa : equipa)));
       setEditMode(false);
+      setSelectedEquipa(null);
       alert('Equipa editada com sucesso.');
     } catch (error) {
       console.error('Erro a editar equipa:', error);
@@ -190,7 +199,7 @@ const EquipasList = () => {
         <div className="modal">
           <div className="modal-content">
             <span className="close" onClick={() => setEditMode(false)}>&times;</span>
-            <h2>Edit Equipa</h2>
+            <h2>Editar Equipa</h2>
             <form onSubmit={handleEditSubmit}>
               <label htmlFor="nome">Nome:</label>
               <input
@@ -200,14 +209,22 @@ const EquipasList = () => {
                 value={formData.nome}
                 onChange={handleInputChange}
               />
-              <label htmlFor="logotipo">Logotipo:</label>
+              <label htmlFor="imagemLogo">Logotipo:</label>
               <input
-                type="text"
-                id="logotipo"
-                name="logotipo"
-                value={formData.logotipo}
-                onChange={handleInputChange}
+                type="file"
+                id="imagemLogo"
+                name="imagemLogo"
+                onChange={handleFileChange}
               />
+              {formData.logotipo && (
+                <div>
+                  <p>Logotipo atual:</p>
+                  <img
+                    src={`https://cptworkouts20240701174748.azurewebsites.net/Imagens/${formData.logotipo}`}
+                    alt={formData.nome}
+                  />
+                </div>
+              )}
               <button type="submit">Guardar</button>
               <button type="button" onClick={() => setEditMode(false)}>Cancelar</button>
             </form>

@@ -88,27 +88,43 @@ const UtilizadoresList = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch('https://cptworkouts20240701174748.azurewebsites.net/api/Utilizadores', {
-        method: 'POST',
+      const apiUrl = editMode
+        ? `https://cptworkouts20240701174748.azurewebsites.net/api/Utilizadores/${formData.id}`
+        : 'https://cptworkouts20240701174748.azurewebsites.net/api/Utilizadores';
+  
+      const method = editMode ? 'PUT' : 'POST';
+  
+      const response = await fetch(apiUrl, {
+        method: method,
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
       });
+  
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-      const newUser = await response.json();
-      setUtilizadores([...utilizadores, newUser]);
+  
+      const updatedUtilizador = await response.json();
+  
+      if (editMode) {
+        setUtilizadores(utilizadores.map(utilizador => utilizador.id === updatedUtilizador.id ? updatedUtilizador : utilizador));
+        setEditMode(false); // Reset edit mode after successful update
+      } else {
+        setUtilizadores([...utilizadores, updatedUtilizador]);
+      }
+  
       setFormData({ nome: '', dataNascimento: '', telemovel: '', userID: '' });
       setShowAddUserModal(false);
     } catch (error) {
-      console.error('Erro ao adicionar o utilizador:', error);
+      console.error(`Error ${editMode ? 'editing' : 'adding'} utilizador:`, error);
       setError(error.message);
     } finally {
       setLoading(false);
     }
   };
+  
 
   const openAddUserModal = () => {
     setShowAddUserModal(true);

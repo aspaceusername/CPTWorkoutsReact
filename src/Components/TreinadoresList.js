@@ -12,7 +12,7 @@ const TreinadoresList = () => {
   const [formData, setFormData] = useState({ nome: '', dataNascimento: '', telemovel: '', userID: '' });
 
   useEffect(() => {
-    //buscar treinadores
+    // Fetch existing treinadores
     const fetchTreinadores = async () => {
       try {
         const response = await fetch('https://cptworkouts20240701174748.azurewebsites.net/api/Treinadores');
@@ -31,7 +31,7 @@ const TreinadoresList = () => {
     fetchTreinadores();
   }, []);
 
-  //mostrar detalhes do treinador
+  // Show details of a treinador
   const handleDetailsClick = async (id) => {
     setLoading(true);
     try {
@@ -42,14 +42,14 @@ const TreinadoresList = () => {
       const data = await response.json();
       alert(`Detalhes do Treinador: ${data.nome}\nData de Nascimento: ${data.dataNascimento}\nTelemovel: ${data.telemovel}\nUserID: ${data.userID}`);
     } catch (error) {
-      console.error('Error ao buscar detalhes do treinador:', error);
+      console.error('Erro ao buscar detalhes do treinador:', error);
       setError(error.message);
     } finally {
       setLoading(false);
     }
   };
 
-  //apagar o treinador
+  // Delete a treinador
   const handleDeleteClick = async (id) => {
     setLoading(true);
     try {
@@ -61,7 +61,7 @@ const TreinadoresList = () => {
           throw new Error('Network response was not ok');
         }
         setTreinadores(prevTreinadores => prevTreinadores.filter(treinador => treinador.id !== id));
-        alert('Treinador Apagado Com Sucesso');
+        alert('Treinador apagado com sucesso');
       }
     } catch (error) {
       console.error('Erro ao apagar treinador:', error);
@@ -71,10 +71,12 @@ const TreinadoresList = () => {
     }
   };
 
+  // Start creating a new treinador
   const handleCreateClick = () => {
     setIsCreating(true);
   };
 
+  // Handle changes in the new treinador form
   const handleCreateChange = (e) => {
     const { name, value } = e.target;
     setNewTreinador(prevState => ({
@@ -83,7 +85,7 @@ const TreinadoresList = () => {
     }));
   };
 
-  //criar um treinador
+  // Submit the new treinador form
   const handleCreateSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -111,29 +113,48 @@ const TreinadoresList = () => {
     }
   };
 
-//editar um treinador
+  // Start editing a treinador
   const handleEditClick = (treinador) => {
     setEditMode(true);
     setSelectedTreinador(treinador);
-    setFormData({ nome: treinador.nome, dataNascimento: treinador.dataNascimento, telemovel: treinador.telemovel, userID: treinador.userID });
+    setFormData({
+      nome: treinador.nome,
+      dataNascimento: treinador.dataNascimento,
+      telemovel: treinador.telemovel,
+      userID: treinador.userID,
+    });
   };
-//editar um treinador
+
+  // Submit the edited treinador form
   const handleEditSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
+      const updatedTreinador = {
+        nome: formData.nome,
+        dataNascimento: formData.dataNascimento,
+        telemovel: formData.telemovel,
+        userID: formData.userID,
+      };
+
       const response = await fetch(`https://cptworkouts20240701174748.azurewebsites.net/api/Treinadores/${selectedTreinador.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(updatedTreinador),
       });
+
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-      const updatedTreinador = await response.json();
-      setTreinadores(prevTreinadores => prevTreinadores.map(treinador => (treinador.id === updatedTreinador.id ? updatedTreinador : treinador)));
+
+      const updatedTreinadorResponse = await response.json();
+      setTreinadores(prevTreinadores =>
+        prevTreinadores.map(treinador =>
+          treinador.id === updatedTreinadorResponse.id ? updatedTreinadorResponse : treinador
+        )
+      );
       setEditMode(false);
       alert('Treinador atualizado com sucesso');
     } catch (error) {
@@ -144,6 +165,7 @@ const TreinadoresList = () => {
     }
   };
 
+  // Handle input changes in the edit form
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prevFormData => ({
@@ -263,8 +285,8 @@ const TreinadoresList = () => {
                 value={formData.userID}
                 onChange={handleInputChange}
               />
-              <button type="submit">Guardar</button>
-              <button type="button" onClick={() => setEditMode(false)}>Cancelar</button>
+              <button type="submit" className="btn">Guardar</button>
+              <button type="button" className="btn" onClick={() => setEditMode(false)}>Cancelar</button>
             </form>
           </div>
         </div>
