@@ -56,9 +56,9 @@ const Register = () => {
             }
         
             const data = await response.json();
-            console.log('Registration successful', data);
+            console.log('Registado com sucesso', data);
         } catch (error) {
-            console.error('Error during registration:', error);
+            console.error('Erro no registo:', error);
         }              
     };
 

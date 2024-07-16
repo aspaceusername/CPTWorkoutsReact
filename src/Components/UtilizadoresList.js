@@ -11,6 +11,7 @@ const UtilizadoresList = () => {
   const [showAddUserModal, setShowAddUserModal] = useState(false);
 
   useEffect(() => {
+    //buscar lista de utilizadores existentes
     const fetchUtilizadores = async () => {
       try {
         const response = await fetch('https://cptworkouts20240701174748.azurewebsites.net/api/Utilizadores');
@@ -20,7 +21,7 @@ const UtilizadoresList = () => {
         const data = await response.json();
         setUtilizadores(data);
       } catch (error) {
-        console.error('Error fetching utilizadores:', error);
+        console.error('Erro ao buscar os utilizadores', error);
         setError(error.message);
       } finally {
         setLoading(false);
@@ -30,6 +31,7 @@ const UtilizadoresList = () => {
     fetchUtilizadores();
   }, []);
 
+  //buscar detalhes dos utilizadores
   const handleDetailsClick = async (id) => {
     setLoading(true);
     try {
@@ -41,19 +43,21 @@ const UtilizadoresList = () => {
       setSelectedUtilizador(data);
       setFormData(data);
     } catch (error) {
-      console.error('Error fetching utilizador details:', error);
+      console.error('Erro ao buscar detalhes dos utilizadores', error);
       setError(error.message);
     } finally {
       setLoading(false);
     }
   };
 
+  //editar o utilizador
   const handleEditClick = (utilizador) => {
     setEditMode(true);
     setSelectedUtilizador(utilizador);
     setFormData(utilizador);
   };
 
+  //apagar um utilizador
   const handleRemoveClick = async (id) => {
     setLoading(true);
     try {
@@ -68,7 +72,7 @@ const UtilizadoresList = () => {
       );
       setSelectedUtilizador(null);
     } catch (error) {
-      console.error('Erro removendo utilizador:', error);
+      console.error('Erro ao remover o utilizador:', error);
       setError(error.message);
     } finally {
       setLoading(false);
@@ -99,7 +103,7 @@ const UtilizadoresList = () => {
       setFormData({ nome: '', dataNascimento: '', telemovel: '', userID: '' });
       setShowAddUserModal(false);
     } catch (error) {
-      console.error('Erro adicionando utilizador:', error);
+      console.error('Erro ao adicionar o utilizador:', error);
       setError(error.message);
     } finally {
       setLoading(false);

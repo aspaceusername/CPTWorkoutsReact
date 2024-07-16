@@ -21,7 +21,7 @@ const ClientesList = () => {
         const data = await response.json();
         setClientes(data);
       } catch (error) {
-        console.error('Error fetching clientes:', error);
+        console.error('Erro ao buscar clientes:', error);
         setError(error.message);
       } finally {
         setLoading(false);
@@ -37,7 +37,7 @@ const ClientesList = () => {
         const data = await response.json();
         setEquipas(data);
       } catch (error) {
-        console.error('Error fetching equipas:', error);
+        console.error('Erro ao buscar equipas:', error);
         setError(error.message);
       }
     };
@@ -57,7 +57,7 @@ const ClientesList = () => {
       setSelectedCliente(data);
       setFormData(data);
     } catch (error) {
-      console.error('Error fetching cliente details:', error);
+      console.error('Erro ao buscar detalhes de clientes:', error);
       setError(error.message);
     } finally {
       setLoading(false);
@@ -85,7 +85,7 @@ const ClientesList = () => {
       );
       setSelectedCliente(null);
     } catch (error) {
-      console.error('Error removing cliente:', error);
+      console.error('Erro ao apagar cliente:', error);
       setError(error.message);
     } finally {
       setLoading(false);
@@ -220,7 +220,7 @@ const ClientesList = () => {
                   />
                 </label>
                 <button type="submit">{editMode ? 'Save' : 'Add'}</button>
-                <button onClick={() => setEditMode(false)}>Cancel</button>
+                <button onClick={() => setEditMode(false)}>Cancelar</button>
               </form>
             </div>
           )}
@@ -301,7 +301,7 @@ const AddClienteModal = ({ formData, error, handleInputChange, handleFormSubmit,
               ))}
             </select>
           </label>
-          <button type="submit">Add</button>
+          <button type="submit">Adicionar</button>
           {error && <div className="error">{error}</div>}
         </form>
       </div>

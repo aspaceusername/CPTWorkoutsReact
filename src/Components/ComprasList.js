@@ -38,9 +38,9 @@ const ComprasList = () => {
         throw new Error('Network response was not ok');
       }
       const data = await response.json();
-      alert(`Details for Compra: ${data.dataCompra}\nServicoFK: ${data.servicoFK}\nClienteFK: ${data.clienteFK}\nValorCompra: ${data.valorCompra}`);
+      alert(`Detalhes da Compra: ${data.dataCompra}\nServicoFK: ${data.servicoFK}\nClienteFK: ${data.clienteFK}\nValorCompra: ${data.valorCompra}`);
     } catch (error) {
-      console.error('Error fetching compra details:', error);
+      console.error('Erro ao buscar detalhes da compra', error);
       setError(error.message);
     } finally {
       setLoading(false);
@@ -61,7 +61,7 @@ const ComprasList = () => {
         alert('Compra Apagada Com Sucesso');
       }
     } catch (error) {
-      console.error('Error deleting compra:', error);
+      console.error('Erro ao apagar compra:', error);
       setError(error.message);
     } finally {
       setLoading(false);
@@ -100,7 +100,7 @@ const ComprasList = () => {
       setIsCreating(false);
       alert('Compra criada com sucesso.');
     } catch (error) {
-      console.error('Error ao criar compra:', error);
+      console.error('Erro ao criar compra:', error);
       setError(error.message);
     } finally {
       setLoading(false);
@@ -132,7 +132,7 @@ const ComprasList = () => {
       setEditMode(false);
       alert('Compra atualizada com sucesso.');
     } catch (error) {
-      console.error('Error ao atualizar compra:', error);
+      console.error('Erro ao atualizar compra:', error);
       setError(error.message);
     } finally {
       setLoading(false);

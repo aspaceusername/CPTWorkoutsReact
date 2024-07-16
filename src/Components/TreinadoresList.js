@@ -12,6 +12,7 @@ const TreinadoresList = () => {
   const [formData, setFormData] = useState({ nome: '', dataNascimento: '', telemovel: '', userID: '' });
 
   useEffect(() => {
+    //buscar treinadores
     const fetchTreinadores = async () => {
       try {
         const response = await fetch('https://cptworkouts20240701174748.azurewebsites.net/api/Treinadores');
@@ -30,6 +31,7 @@ const TreinadoresList = () => {
     fetchTreinadores();
   }, []);
 
+  //mostrar detalhes do treinador
   const handleDetailsClick = async (id) => {
     setLoading(true);
     try {
@@ -38,15 +40,16 @@ const TreinadoresList = () => {
         throw new Error('Network response was not ok');
       }
       const data = await response.json();
-      alert(`Details for Treinador: ${data.nome}\nData de Nascimento: ${data.dataNascimento}\nTelemovel: ${data.telemovel}\nUserID: ${data.userID}`);
+      alert(`Detalhes do Treinador: ${data.nome}\nData de Nascimento: ${data.dataNascimento}\nTelemovel: ${data.telemovel}\nUserID: ${data.userID}`);
     } catch (error) {
-      console.error('Error fetching treinadores detalhes:', error);
+      console.error('Error ao buscar detalhes do treinador:', error);
       setError(error.message);
     } finally {
       setLoading(false);
     }
   };
 
+  //apagar o treinador
   const handleDeleteClick = async (id) => {
     setLoading(true);
     try {
@@ -80,6 +83,7 @@ const TreinadoresList = () => {
     }));
   };
 
+  //criar um treinador
   const handleCreateSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -107,12 +111,13 @@ const TreinadoresList = () => {
     }
   };
 
+//editar um treinador
   const handleEditClick = (treinador) => {
     setEditMode(true);
     setSelectedTreinador(treinador);
     setFormData({ nome: treinador.nome, dataNascimento: treinador.dataNascimento, telemovel: treinador.telemovel, userID: treinador.userID });
   };
-
+//editar um treinador
   const handleEditSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);

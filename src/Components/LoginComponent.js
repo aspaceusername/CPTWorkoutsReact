@@ -6,7 +6,7 @@ const LoginForm = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
-    const { login } = useContext(AuthContext); // Use login function from context
+    const { login } = useContext(AuthContext);
 
     const handleLogin = async () => {
         const data = { Email: email, Password: password };
@@ -20,7 +20,7 @@ const LoginForm = () => {
             });
 
             if (!response.ok) {
-                throw new Error('Login failed');
+                throw new Error('Login Falhou');
             }
 
             const userData = await response.json(); 
@@ -29,7 +29,7 @@ const LoginForm = () => {
             window.location.href = '/';
 
         } catch (error) {
-            setError('Invalid login attempt. Please check your credentials.');
+            setError('Login invalido');
         }
     };
 

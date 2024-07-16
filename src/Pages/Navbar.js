@@ -71,7 +71,7 @@ const Navbar = () => {
               </Link>
               <span className="w3-bar-item w3-button w3-padding-large w3-hide-small">{user.email}</span>
               <button className="w3-bar-item w3-button w3-padding-large w3-hide-small" onClick={logout}>
-                Logout
+                LOGOUT
               </button>
             </>
           ) : (
@@ -123,7 +123,7 @@ const Navbar = () => {
             </Link>
             <span className="w3-bar-item w3-button w3-padding-large">{user.email}</span>
             <button className="w3-bar-item w3-button w3-padding-large" onClick={logout}>
-              Logout
+              LOGOUT
             </button>
           </>
         ) : (
