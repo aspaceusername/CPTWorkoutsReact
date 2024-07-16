@@ -12,7 +12,7 @@ import ComprasList from './Components/ComprasList';
 import LoginComponent from './Components/LoginComponent';
 import RegisterComponent from './Components/RegisterComponent';
 import Sobre from './Pages/Sobre';
-import ConfirmationPage from './Components/ConfirmEmailPage'; // Ensure you import ConfirmationPage
+import ConfirmationPage from './Components/ConfirmEmailPage';
 import { AuthProvider } from './contexts/AuthContext';
 
 function App() {

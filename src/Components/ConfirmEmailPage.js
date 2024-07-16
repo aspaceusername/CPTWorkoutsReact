@@ -17,12 +17,12 @@ const ConfirmationPage = () => {
                 });
 
                 if (response.ok) {
-                    setConfirmationMessage('Email confirmed successfully! Redirecting to login...');
+                    setConfirmationMessage('Email confirmado com sucesso!');
                 } else {
-                    setConfirmationMessage('Email confirmation failed. Please try again.');
+                    setConfirmationMessage('Confirmacao de email falhou.');
                 }
             } catch (error) {
-                setConfirmationMessage('An error occurred. Please try again.');
+                setConfirmationMessage('Um erro ocorreu.');
             }
         };
 
@@ -31,15 +31,15 @@ const ConfirmationPage = () => {
 
     useEffect(() => {
         const redirectTimer = setTimeout(() => {
-            window.location.href = '/login'; // Redirect to login after confirmation
-        }, 3000); // Redirect after 3 seconds
+            window.location.href = '/login';
+        }, 3000);
 
         return () => clearTimeout(redirectTimer);
     }, []);
 
     return (
         <div>
-            <h2>Email Confirmation</h2>
+            <h2>Confirmacao de Email</h2>
             <p>{confirmationMessage}</p>
         </div>
     );

@@ -43,7 +43,7 @@ const EquipasList = () => {
       const clientsDescription = data.listaClientes.map(cliente => cliente.nome).join(', ');
       alert(`Detalhes Equipa: ${data.nome}\nClientes: ${clientsDescription}`);
     } catch (error) {
-      console.error('Erro fetching equipa detalhes:', error);
+      console.error('Erro ao buscar detalhes da equipa:', error);
       setError(error.message);
     } finally {
       setLoading(false);
@@ -61,7 +61,7 @@ const EquipasList = () => {
           throw new Error('Network response was not ok');
         }
         setEquipas(prevEquipas => prevEquipas.filter(equipa => equipa.id !== id));
-        alert('Equipa deleted successfully.');
+        alert('Equipa Apagada com Sucesso.');
       }
     } catch (error) {
       console.error('Erro ao apagar equipa:', error);
@@ -94,9 +94,9 @@ const EquipasList = () => {
       const updatedEquipa = await response.json();
       setEquipas(prevEquipas => prevEquipas.map(equipa => (equipa.id === updatedEquipa.id ? updatedEquipa : equipa)));
       setEditMode(false);
-      alert('Equipa updated successfully.');
+      alert('Equipa editada com sucesso.');
     } catch (error) {
-      console.error('Erro updating equipa:', error);
+      console.error('Erro a editar equipa:', error);
       setError(error.message);
     } finally {
       setLoading(false);
@@ -126,9 +126,9 @@ const EquipasList = () => {
       setFormData({ nome: '', logotipo: '' });
       setFile(null);
       setShowAddModal(false);
-      alert('Equipa added successfully.');
+      alert('Equipa criada com sucesso.');
     } catch (error) {
-      console.error('Error adding equipa:', error);
+      console.error('Erro ao criar equipa:', error);
       setError(error.message);
     } finally {
       setLoading(false);
@@ -160,7 +160,7 @@ const EquipasList = () => {
   }
 
   if (error) {
-    return <div className="error">Error: {error.message}</div>;
+    return <div className="error">Erro: {error.message}</div>;
   }
 
   return (
@@ -208,8 +208,8 @@ const EquipasList = () => {
                 value={formData.logotipo}
                 onChange={handleInputChange}
               />
-              <button type="submit">Save</button>
-              <button type="button" onClick={() => setEditMode(false)}>Cancel</button>
+              <button type="submit">Guardar</button>
+              <button type="button" onClick={() => setEditMode(false)}>Cancelar</button>
             </form>
           </div>
         </div>
@@ -237,7 +237,7 @@ const EquipasList = () => {
                 onChange={handleFileChange}
               />
               <button type="submit">Adicionar</button>
-              <button type="button" onClick={handleCloseAddModal}>Cancel</button>
+              <button type="button" onClick={handleCloseAddModal}>Cancelar</button>
             </form>
           </div>
         </div>

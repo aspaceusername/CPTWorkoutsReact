@@ -56,28 +56,29 @@ function Landing() {
             'Y_Ij37aIjOQxbcix3'
         ).then(
             (response) => {
-                console.log('SUCCESS!', response.status, response.text);
-                alert('Message Sent!');
+                console.log('Sucesso', response.status, response.text);
+                alert('Mensagem Enviada!');
             },
             (error) => {
-                console.log('FAILED...', error);
-                alert('An error occurred, please try again.');
+                console.log('Erro', error);
+                alert('Ocorreu um erro.');
             }
         );
     };
 
     const handleCreateCompra = async () => {
         if (!user) {
-            // Handle case where user is not logged in
-            console.log('User not logged in. Redirect to login page or show message.');
+            // utilizador não está logged in
+            console.log('Utilizador não está logged in');
             return;
         }
 
+        //simular realizar uma compra
         const compraData = {
-            DataCompra: new Date().toISOString(), // Use the current date and time in ISO format
-            ValorCompraAux: "50.00", // Ensure this matches the expected format
-            ServicoFK: 1, // Replace with the actual service ID you want to use
-            ClienteFK: user.userId // Use the user's ID
+            DataCompra: new Date().toISOString(),
+            ValorCompraAux: "50.00",
+            ServicoFK: 1,
+            ClienteFK: user.userId
         };
 
         try {
@@ -85,21 +86,17 @@ function Landing() {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    // Add any authentication headers if required
                 },
                 body: JSON.stringify(compraData)
             });
 
             if (response.ok) {
-                console.log('Compra created successfully');
-                // Redirect to WhatsApp or any other page after successful creation if needed
+                console.log('Compra criada com sucesso');
             } else {
-                console.error('Failed to create compra');
-                // Handle error scenario
+                console.error('Erro ao criar compra');
             }
         } catch (error) {
-            console.error('Error creating compra:', error);
-            // Handle error scenario
+            console.error('Erro catched ao criar compra', error);
         }
     };
 

@@ -13,6 +13,7 @@ const ServicosList = () => {
   const [formData, setFormData] = useState({ nome: '', preco: '', listaIdsTreinadores: [] });
 
   useEffect(() => {
+    //buscar servicos já existentes
     const fetchServicos = async () => {
       try {
         const response = await fetch('https://cptworkouts20240701174748.azurewebsites.net/api/Servicos');
@@ -28,6 +29,7 @@ const ServicosList = () => {
       }
     };
 
+    //buscar treinadores já existentes
     const fetchTreinadores = async () => {
       try {
         const response = await fetch('https://cptworkouts20240701174748.azurewebsites.net/api/Treinadores');
@@ -45,6 +47,7 @@ const ServicosList = () => {
     fetchTreinadores();
   }, []);
 
+  //mostrar detalhes do servico
   const handleDetailsClick = async (id) => {
     setLoading(true);
     try {
@@ -54,15 +57,16 @@ const ServicosList = () => {
       }
       const data = await response.json();
       const trainersDescription = data.listaTreinadores.map(treinador => treinador.nome).join(', ');
-      alert(`Details for Servico: ${data.nome}\nTreinadores: ${trainersDescription}`);
+      alert(`Delhes do Servico: ${data.nome}\nTreinadores: ${trainersDescription}`);
     } catch (error) {
-      console.error('Error fetching servico detalhes:', error);
+      console.error('Error ao buscar detalhes do servico: ', error);
       setError(error.message);
     } finally {
       setLoading(false);
     }
   };
 
+  //Apagar um servico
   const handleDeleteClick = async (id) => {
     setLoading(true);
     try {
@@ -74,7 +78,7 @@ const ServicosList = () => {
           throw new Error('Network response was not ok');
         }
         setServicos(prevServicos => prevServicos.filter(servico => servico.id !== id));
-        alert('Servico deleted successfully.');
+        alert('Servico apagado com sucesso');
       }
     } catch (error) {
       console.error('Erro ao apagar servico:', error);
@@ -84,10 +88,11 @@ const ServicosList = () => {
     }
   };
 
+  //Criar um servico
   const handleCreateClick = () => {
     setIsCreating(true);
   };
-
+  //Criar um servico
   const handleCreateChange = (e) => {
     const { name, value, type, checked } = e.target;
     if (type === 'checkbox') {
@@ -105,7 +110,7 @@ const ServicosList = () => {
       }));
     }
   };
-
+  //Criar um servico
   const handleCreateSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
